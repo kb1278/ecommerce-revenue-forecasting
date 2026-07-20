@@ -332,9 +332,4 @@ By comparing ARIMA and XGBoost models, the project showed that machine learning-
 
 ---
 
-# Author
 
-**Kulwinder Bhamra**
-
-GitHub:
-https://github.com/kb1278
