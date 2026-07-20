@@ -286,12 +286,7 @@ ecommerce-revenue-forecasting/
 ├── ecommerce_revenue_forecasting.ipynb
 ├── README.md
 ├── requirements.txt
-│
-└── images/
-    ├── revenue_trend.png
-    ├── arima_forecast.png
-    ├── xgboost_forecast.png
-    └── feature_importance.png
+
 ```
 
 ---
