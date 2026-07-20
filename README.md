@@ -2,66 +2,144 @@
 
 ## Project Overview
 
-This project develops a time-series forecasting model to predict future monthly revenue for an e-commerce business using historical transaction data.
+This project builds an end-to-end revenue forecasting pipeline using the **Olist Brazilian E-Commerce dataset**.
 
-Using the **Olist Brazilian E-Commerce dataset**, transaction-level sales data was transformed into monthly revenue trends. Forecasting models were developed to identify future revenue patterns and support business decision-making around planning, budgeting, and inventory management.
+The objective was to predict future monthly revenue by comparing two forecasting approaches:
+
+- **ARIMA** - Statistical time-series forecasting model
+- **XGBoost** - Machine learning forecasting model using engineered time-series features
+
+The project workflow includes:
+
+- Data integration
+- Exploratory time-series analysis
+- Revenue aggregation
+- Feature engineering
+- Model training
+- Forecast evaluation using MAE and RMSE
+- Feature importance analysis
 
 ---
 
-## Business Problem
+# Business Problem
 
-E-commerce companies need accurate revenue forecasts to:
+Accurate revenue forecasting helps e-commerce businesses:
 
 - Improve financial planning
-- Support inventory decisions
-- Identify seasonal demand patterns
-- Optimise marketing and operational strategies
+- Support inventory management
+- Identify future sales trends
+- Make data-driven operational decisions
 
-The objective of this project was to build a forecasting model capable of predicting future monthly revenue based on historical sales performance.
+The goal of this project was to develop a forecasting model capable of predicting future monthly revenue from historical transaction data.
 
 ---
 
-## Dataset
+# Dataset
 
 **Dataset:** Olist Brazilian E-Commerce Dataset
 
 Source:
 https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 
-The dataset contains:
+The dataset contains information about:
 
-- Customer information
-- Orders
+- Customer orders
 - Payments
 - Products
-- Reviews
 - Sellers
-- Delivery information
+- Delivery performance
+- Customer reviews
 
-Key tables used:
+This project used:
 
-| Table | Description |
+| Dataset | Purpose |
 |---|---|
-| orders | Order dates and order status |
-| order_payments | Payment values and transaction details |
-| products | Product information |
-| customers | Customer details |
+| `olist_orders_dataset.csv` | Order dates and order information |
+| `olist_order_payments_dataset.csv` | Revenue and payment values |
 
 ---
 
 # Project Workflow
 
-## 1. Data Preparation
+```
+                Data Sources
+                     |
+                     v
+       Orders Dataset + Payments Dataset
+                     |
+                     v
+             Data Integration
+        (Merge orders and payments)
+                     |
+                     v
+             Data Exploration
+       (Data types and missing values)
+                     |
+                     v
+          Revenue Aggregation
+      (Monthly revenue calculation)
+                     |
+                     v
+     Exploratory Time-Series Analysis
+          (Revenue trends)
+                     |
+                     v
+           Train/Test Split
+        (Six-month holdout testing)
+                     |
+          +----------+----------+
+          |                     |
+          v                     v
+       ARIMA              XGBoost
+   Statistical Model   ML Forecasting
+                              |
+                              v
+                  Feature Engineering
+              (Lag features + rolling averages)
+                     |
+                     v
+             Model Evaluation
+             (MAE and RMSE)
+                     |
+                     v
+            Feature Importance Analysis
+```
+
+---
+
+# Technologies Used
+
+## Programming & Data Analysis
+
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+
+## Machine Learning & Statistics
+
+- Statsmodels (ARIMA)
+- XGBoost
+- Scikit-learn
+
+## Environment
+
+- Jupyter Notebook
+- Git & GitHub
+
+---
+
+# Data Preparation
 
 Steps performed:
 
-- Loaded multiple datasets using Pandas
-- Converted timestamps into monthly periods
-- Joined order and payment tables
+- Loaded order and payment datasets
+- Converted timestamps into datetime format
+- Merged order and payment information
+- Checked missing values
 - Aggregated transaction-level data into monthly revenue
-- Checked missing values and data quality
 
-Example metric created:
+Revenue calculation:
 
 ```
 Monthly Revenue = Sum(payment_value)
@@ -69,119 +147,133 @@ Monthly Revenue = Sum(payment_value)
 
 ---
 
-# 2. Exploratory Data Analysis
+# Exploratory Analysis
 
 Analysed:
 
-- Revenue growth trends
-- Monthly seasonality
-- Revenue fluctuations
-- Historical sales patterns
+- Monthly revenue trends
+- Revenue growth patterns
+- Time-series behaviour
+- Historical fluctuations
 
-Key findings:
+Key observation:
 
-- Revenue increased significantly during the dataset period
-- Customer purchasing behaviour showed seasonal patterns
-- Monthly aggregation provided a clearer view of business performance
+- Revenue increased significantly throughout the analysed period, with strong variations between months.
 
 ---
 
-# 3. Feature Engineering
+# Forecasting Models
 
-Created forecasting features including:
+## 1. ARIMA Forecasting
 
-- Monthly revenue
+ARIMA was used as a traditional statistical forecasting approach.
+
+Model:
+
+```
+ARIMA(1,1,1)
+```
+
+The model used historical revenue values to predict future monthly revenue.
+
+---
+
+## 2. XGBoost Forecasting
+
+XGBoost was implemented as a machine learning forecasting approach.
+
+Feature engineering included:
+
+### Time Features
+
+- Year
+- Month
+- Quarter
+
+### Lag Features
+
+- Previous month revenue
+- Two-month lag
+- Three-month lag
+- Six-month lag
+
+### Rolling Statistics
+
+- Three-month rolling average
+- Six-month rolling average
+- Three-month rolling standard deviation
+
+These features allowed the model to capture recent revenue trends and patterns.
+
+---
+
+# Model Evaluation
+
+Models were evaluated using a six-month holdout test set.
+
+Metrics:
+
+### Mean Absolute Error (MAE)
+
+Measures the average difference between actual and predicted revenue.
+
+### Root Mean Squared Error (RMSE)
+
+Measures prediction error while penalising larger forecasting mistakes.
+
+---
+
+## Model Performance
+
+| Model | Approach | MAE (BRL) | RMSE (BRL) |
+|---|---|---:|---:|
+| ARIMA | Statistical forecasting | 502,347.62 | 710,644.07 |
+| XGBoost | Machine learning forecasting | 395,933.95 | 599,111.31 |
+
+---
+
+# Results
+
+XGBoost achieved the best forecasting performance.
+
+Compared with ARIMA:
+
+- Reduced MAE by approximately **21%**
+- Reduced RMSE by approximately **16%**
+
+The improvement came from using additional forecasting features:
+
 - Lag variables
 - Rolling averages
 - Time-based features
 
-Example features:
-
-| Feature | Description |
-|---|---|
-| lag_1 | Previous month's revenue |
-| lag_3 | Revenue from three months earlier |
-| rolling_mean | Moving average revenue |
-| month | Calendar month |
-
 ---
 
-# 4. Forecasting Models
+# Feature Importance
 
-## Prophet Model
+XGBoost feature importance analysis was performed to understand which variables contributed most to predictions.
 
-Developed a time-series forecasting model using Prophet.
-
-Prophet was selected because it handles:
-
-- Trend changes
-- Seasonality
-- Business time-series patterns
-
-## XGBoost Model
-
-Developed an additional machine learning forecasting approach using XGBoost regression.
-
-Features included:
+Important features included:
 
 - Historical revenue values
 - Lag features
-- Rolling statistics
-- Calendar features
+- Rolling revenue trends
+
+This improved model interpretability and helped identify key forecasting drivers.
 
 ---
 
-# 5. Model Evaluation
+# Business Insights
 
-Models were evaluated using:
+The forecasting pipeline demonstrated how historical transaction data can be transformed into predictive insights.
 
-### Mean Absolute Error (MAE)
+Potential business applications:
 
-Measures the average difference between predicted and actual revenue.
-
-### Root Mean Squared Error (RMSE)
-
-Measures prediction error while giving more weight to larger mistakes.
-
-Example results:
-
-| Model | MAE | RMSE |
-|---|---:|---:|
-| Prophet | 260K BRL | 314K BRL |
-| XGBoost | TBD | TBD |
-
----
-
-# Results & Insights
-
-The forecasting model successfully captured historical revenue patterns and provided future revenue predictions.
-
-Business insights:
-
-- Revenue demonstrated strong growth over the analysed period
-- Forecasting can support future budgeting and operational planning
-- Time-series modelling provides valuable visibility into expected sales performance
-
----
-
-# Technologies Used
-
-### Programming
-- Python
-
-### Data Analysis
-- Pandas
-- NumPy
-- Matplotlib
-
-### Machine Learning
-- Prophet
-- XGBoost
-- Scikit-learn
-
-### Development
-- Jupyter Notebook
-- Git & GitHub
+- Revenue planning
+- Sales forecasting
+- Budget preparation
+- Inventory optimisation
+- Operational decision-making
 
 ---
 
@@ -197,13 +289,24 @@ ecommerce-revenue-forecasting/
 │
 └── images/
     ├── revenue_trend.png
-    ├── forecast_results.png
-    └── model_metrics.png
+    ├── arima_forecast.png
+    ├── xgboost_forecast.png
+    └── feature_importance.png
 ```
 
 ---
 
-# How to Run
+# Installation
+
+Install required libraries:
+
+```bash
+pip install pandas numpy matplotlib scikit-learn statsmodels xgboost
+```
+
+---
+
+# Running the Project
 
 Clone the repository:
 
@@ -211,34 +314,21 @@ Clone the repository:
 git clone https://github.com/kb1278/ecommerce-revenue-forecasting.git
 ```
 
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Launch Jupyter Notebook:
-
-```bash
-jupyter notebook
-```
-
-Open:
+Open the notebook:
 
 ```
 ecommerce_revenue_forecasting.ipynb
 ```
 
+Run all cells to reproduce the analysis and forecasting results.
+
 ---
 
-# Future Improvements
+# Conclusion
 
-Potential improvements:
+This project demonstrates an end-to-end machine learning forecasting workflow, from raw transaction data integration through model development and evaluation.
 
-- Deploy forecasting model using Streamlit
-- Add automated data pipelines using dbt and BigQuery
-- Experiment with additional forecasting algorithms
-- Add real-time revenue monitoring dashboard
+By comparing ARIMA and XGBoost models, the project showed that machine learning-based forecasting with engineered time-series features provided stronger revenue predictions for this dataset.
 
 ---
 
@@ -246,4 +336,5 @@ Potential improvements:
 
 **Kulwinder Bhamra**
 
-GitHub: https://github.com/kb1278
+GitHub:
+https://github.com/kb1278
