@@ -61,7 +61,7 @@ This project used:
 
 # Project Workflow
 
-```
+```text
                 Data Sources
                      |
                      v
@@ -85,17 +85,21 @@ This project used:
                      |
                      v
            Train/Test Split
-        (Six-month holdout testing)
+        (March-August 2018 holdout)
                      |
           +----------+----------+
           |                     |
           v                     v
        ARIMA              XGBoost
-   Statistical Model   ML Forecasting
+   Statistical Model   Feature Engineering
                               |
                               v
-                  Feature Engineering
-              (Lag features + rolling averages)
+                   Lag & Rolling Features
+                              |
+                              v
+                       ML Forecasting
+          |                     |
+          +----------+----------+
                      |
                      v
              Model Evaluation
@@ -103,7 +107,10 @@ This project used:
                      |
                      v
             Feature Importance Analysis
+
 ```
+       
+
 
 ---
 
