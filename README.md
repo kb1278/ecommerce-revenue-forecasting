@@ -134,10 +134,12 @@ This project used:
 Steps performed:
 
 - Loaded order and payment datasets
-- Converted timestamps into datetime format
-- Merged order and payment information
-- Checked missing values
-- Aggregated transaction-level data into monthly revenue
+- Converted order purchase timestamps into datetime format
+- Merged order and payment information using `order_id`
+- Checked data types and missing values
+- Aggregated transaction-level payment data into monthly revenue
+- Excluded September and October 2018 from the modelling dataset to avoid incomplete final periods
+
 
 Revenue calculation:
 
@@ -146,6 +148,8 @@ Monthly Revenue = Sum(payment_value)
 ```
 
 ---
+
+# Exploratory Analysis
 
 # Exploratory Analysis
 
@@ -158,7 +162,7 @@ Analysed:
 
 Key observation:
 
-- Revenue increased significantly throughout the analysed period, with strong variations between months.
+- Monthly revenue increased substantially during the earlier part of the analysed period before showing fluctuations in the later months.
 
 ---
 
@@ -187,7 +191,7 @@ Feature engineering included:
 ### Time Features
 
 - Year
-- Month
+- Month number
 - Quarter
 
 ### Lag Features
@@ -203,19 +207,25 @@ Feature engineering included:
 - Six-month rolling average
 - Three-month rolling standard deviation
 
-These features allowed the model to capture recent revenue trends and patterns.
+All rolling statistics were calculated using historical revenue values to avoid using future information when generating features.
+
+These features allowed the model to capture recent revenue trends and historical patterns.
 
 ---
 
 # Model Evaluation
 
-Models were evaluated using a six-month holdout test set.
+Models were evaluated using a chronological six-month holdout test set covering:
 
-Metrics:
+**March 2018 to August 2018**
+
+The final six months were held out from model training and used only for evaluating forecasting performance.
+
+## Metrics
 
 ### Mean Absolute Error (MAE)
 
-Measures the average difference between actual and predicted revenue.
+Measures the average absolute difference between actual and predicted revenue.
 
 ### Root Mean Squared Error (RMSE)
 
@@ -225,41 +235,43 @@ Measures prediction error while penalising larger forecasting mistakes.
 
 ## Model Performance
 
-| Model | Approach | MAE (BRL) | RMSE (BRL) |
-|---|---|---:|---:|
-| ARIMA | Statistical forecasting | 502,347.62 | 710,644.07 |
-| XGBoost | Machine learning forecasting | 395,933.95 | 599,111.31 |
+| Model   | Approach                     | MAE (BRL) | RMSE (BRL) |
+| ------- | ---------------------------- | --------- | ---------- |
+| ARIMA   | Statistical forecasting      | 49,734.35 | 73,659.58  |
+| XGBoost | Machine learning forecasting | 90,298.60 | 110,675.97 |
 
 ---
 
 # Results
 
-XGBoost achieved the best forecasting performance.
+# Results
 
-Compared with ARIMA:
+ARIMA achieved the best forecasting performance on the six-month holdout test set.
 
-- Reduced MAE by approximately **21%**
-- Reduced RMSE by approximately **16%**
+Compared with XGBoost:
 
-The improvement came from using additional forecasting features:
+- Reduced MAE by approximately **45%**
+- Reduced RMSE by approximately **33%**
 
-- Lag variables
-- Rolling averages
-- Time-based features
+The stronger performance of ARIMA suggests that the statistical model was better suited to capturing the underlying revenue trend during this evaluation period.
+
+Although XGBoost used additional time-based features, lag variables and rolling statistics, the relatively small number of monthly observations may have limited its ability to generalise effectively.
+
+The results demonstrate the importance of evaluating both statistical and machine learning approaches rather than assuming that a more complex machine learning model will necessarily produce better forecasts.
 
 ---
 
 # Feature Importance
 
-XGBoost feature importance analysis was performed to understand which variables contributed most to predictions.
+XGBoost feature importance analysis was performed to understand which engineered variables contributed most to the model's predictions.
 
-Important features included:
+The analysis examined the relative importance of:
 
-- Historical revenue values
-- Lag features
-- Rolling revenue trends
+- Historical revenue lag variables
+- Rolling revenue statistics
+- Time-based features
 
-This improved model interpretability and helped identify key forecasting drivers.
+This provided additional insight into which historical patterns the machine learning model used when generating forecasts.
 
 ---
 
