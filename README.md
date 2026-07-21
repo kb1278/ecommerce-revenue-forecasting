@@ -151,8 +151,6 @@ Monthly Revenue = Sum(payment_value)
 
 # Exploratory Analysis
 
-# Exploratory Analysis
-
 Analysed:
 
 - Monthly revenue trends
@@ -242,7 +240,6 @@ Measures prediction error while penalising larger forecasting mistakes.
 
 ---
 
-# Results
 
 # Results
 
