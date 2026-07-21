@@ -265,15 +265,19 @@ This improved model interpretability and helped identify key forecasting drivers
 
 # Business Insights
 
-The forecasting pipeline demonstrated how historical transaction data can be transformed into predictive insights.
+The forecasting pipeline demonstrates how historical e-commerce transaction data can support forward-looking business decisions.
 
-Potential business applications:
+Potential applications include:
 
-- Revenue planning
-- Sales forecasting
-- Budget preparation
-- Inventory optimisation
-- Operational decision-making
+- **Revenue planning:** Forecast expected monthly revenue to support financial planning and budgeting.
+- **Sales forecasting:** Identify expected future revenue patterns and support sales target setting.
+- **Inventory optimisation:** Use revenue forecasts to help anticipate future demand and inform inventory planning.
+- **Operational decision-making:** Support resource allocation and business planning using data-driven revenue expectations.
+- **Performance monitoring:** Compare actual revenue against forecasts to identify unexpected changes in business performance.
+
+The model comparison also provides a practical business insight: **the most complex model is not always the best-performing model**. In this project, ARIMA achieved lower forecasting errors than XGBoost, demonstrating the importance of selecting models based on performance on unseen, time-ordered data rather than model complexity alone.
+
+
 
 ---
 
@@ -321,9 +325,18 @@ Run all cells to reproduce the analysis and forecasting results.
 
 # Conclusion
 
-This project demonstrates an end-to-end machine learning forecasting workflow, from raw transaction data integration through model development and evaluation.
+This project demonstrates an end-to-end revenue forecasting workflow, from raw transaction data integration through time-series analysis, feature engineering, model development and evaluation.
 
-By comparing ARIMA and XGBoost models, the project showed that machine learning-based forecasting with engineered time-series features provided stronger revenue predictions for this dataset.
+Two forecasting approaches were compared using a six-month chronological holdout test set:
+
+ARIMA - Statistical time-series forecasting
+XGBoost - Machine learning forecasting with engineered time-series features
+
+ARIMA achieved the strongest forecasting performance, with an MAE of 49.7K BRL and an RMSE of 73.7K BRL, compared with XGBoost's MAE of 90.3K BRL and RMSE of 110.7K BRL.
+
+ARIMA achieved approximately 45% lower MAE and 33% lower RMSE than XGBoost.
+
+The results highlight the importance of comparing multiple modelling approaches and selecting the model that performs best on unseen, time-ordered data. While XGBoost provided a flexible feature-based modelling approach, ARIMA was better suited to this dataset and evaluation period.
 
 ---
 
