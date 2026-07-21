@@ -329,8 +329,8 @@ This project demonstrates an end-to-end revenue forecasting workflow, from raw t
 
 Two forecasting approaches were compared using a six-month chronological holdout test set:
 
-ARIMA - Statistical time-series forecasting
-XGBoost - Machine learning forecasting with engineered time-series features
+- ARIMA - Statistical time-series forecasting
+- XGBoost - Machine learning forecasting with engineered time-series features
 
 ARIMA achieved the strongest forecasting performance, with an MAE of 49.7K BRL and an RMSE of 73.7K BRL, compared with XGBoost's MAE of 90.3K BRL and RMSE of 110.7K BRL.
 
